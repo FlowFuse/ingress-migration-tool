@@ -1,0 +1,19 @@
+version: "2"
+
+run:
+  timeout: 3m
+  tests: false
+
+linters:
+  enable:
+    - gocritic
+    - errcheck
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - unparam
+    - revive
+
+issues:
+  exclude-use-default: false
