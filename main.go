@@ -12,6 +12,7 @@ import (
 	"sync/atomic"
 
 	networkingv1 "k8s.io/api/networking/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -212,7 +213,7 @@ func copyIngressObjects(clientset *kubernetes.Clientset, config Config) error {
 
 			_, err := clientset.NetworkingV1().Ingresses(config.Namespace).Create(ctx, newIngress, metav1.CreateOptions{})
 			if err != nil {
-				if strings.Contains(err.Error(), "already exists") {
+				if apierrors.IsAlreadyExists(err) {
 					log.Printf("Warning: Ingress '%s' already exists - skipping", newName)
 					atomic.AddInt32(&skippedInCopy, 1)
 				} else {
@@ -359,7 +360,7 @@ func cleanupIngressObjects(clientset *kubernetes.Clientset, config Config) error
 
 			_, err := clientset.NetworkingV1().Ingresses(config.Namespace).Create(ctx, newIngress, metav1.CreateOptions{})
 			if err != nil {
-				if strings.Contains(err.Error(), "already exists") {
+				if apierrors.IsAlreadyExists(err) {
 					log.Printf("Warning: Ingress '%s' already exists, deleting suffixed version '%s'", newName, ing.Name)
 					// If the final name already exists, just delete the suffixed one
 				} else {
