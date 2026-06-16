@@ -1,6 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
+    open-pull-requests-limit: 30
     directory: "/"
     schedule:
       interval: "weekly"
@@ -8,6 +9,7 @@ updates:
     cooldown:
       default-days: 1
   - package-ecosystem: "gomod"
+    open-pull-requests-limit: 30
     directory: "/"
     schedule:
       interval: "weekly"
